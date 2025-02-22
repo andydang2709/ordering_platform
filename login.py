@@ -59,7 +59,12 @@ def login():
                     else:
                         st.error("Invalid username or password.")
         except Exception as e:
-            st.error(f"Database error: {e}")
+            st.error(f"Database error: {e}")    
+
+    st.markdown(
+        "Haven't signed up yet? [Sign up here](register.py)",
+        unsafe_allow_html=True
+    )
 
 if __name__ == "__main__":
     login()
