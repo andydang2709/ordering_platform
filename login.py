@@ -17,6 +17,7 @@ from sqlalchemy import create_engine, text
 import os
 from dotenv import load_dotenv
 import hashlib
+import subprocess
 
 
 ## TODO: Define all classes
@@ -61,10 +62,58 @@ def login():
         except Exception as e:
             st.error(f"Database error: {e}")    
 
-    st.markdown(
-        "Haven't signed up yet? [Sign up here](register.py)",
-        unsafe_allow_html=True
-    )
+    # if st.button("Register"):
+    #     subprocess.run(["streamlit", "run", "register.py"])
 
-if __name__ == "__main__":
+
+def register():
+    st.title("Register New Account")
+
+    new_username = st.text_input("Choose a Username", key="reg_username")
+    new_password = st.text_input("Choose a Password", type="password", key="reg_password")
+    confirm_password = st.text_input("Confirm Password", type="password", key="confirm_password")
+
+    if st.button("Register"):
+        if not new_username or not new_password or not confirm_password:
+            st.error("All fields are required.")
+            return
+        
+        if new_password != confirm_password:
+            st.error("Passwords do not match.")
+            return
+
+        hashed_password = hash_password(new_password)
+
+        try:
+            with engine.connect() as conn:
+                # Check if username already exists
+                check_query = text("SELECT user_id FROM customers WHERE user_id = :username")
+                existing_user = conn.execute(check_query, {"username": new_username}).fetchone()
+
+                if existing_user:
+                    st.error("Username already exists. Please choose another.")
+                    return
+
+                # Insert new user
+                insert_query = text("""
+                    INSERT INTO customers (user_id, password, user_name, favorites, last_visit)
+                    VALUES (:username, :password, :user_name, NULL, CURDATE())
+                """)
+                conn.execute(insert_query, {
+                    "username": new_username,
+                    "password": hashed_password,
+                    "user_name": new_username 
+                })
+
+                st.success("Registration successful! You can now log in.")
+
+        except Exception as e:
+            st.error(f"Database error: {e}")
+
+tab1, tab2 = st.tabs(["Login", "Create a New Account"])
+
+with tab1:
     login()
+
+with tab2:
+    register()
