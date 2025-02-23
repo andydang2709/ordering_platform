@@ -37,9 +37,12 @@ INSERT INTO menu VALUES
 ("dairy_01","Whole Milk", 0.75),
 ("syrup_01","Vanilla Syrup",0.25),
 ("sweet_00", "0% Sweetness Level", 0.00),
-("ice_50","50% Ice Level", 0.00)
+("ice_50","50% Ice Level", 0.00),
+("food_01", "Honeycomb Cake", 3.00)
 ;
 
 INSERT INTO transactions (user_id, food_id, sales_revenue) VALUES 
     ("andydang", '["base_01", "dairy_01", "syrup_01", "sweetness_00", "ice_50"]', 5.02),
     ("andydang", '["food_01", "sweetness_50", "no_nuts"]', 7.50);
+    
+select * from menu;

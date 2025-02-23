@@ -98,6 +98,8 @@ def register():
                     "user_name": new_full_name 
                 })
 
+                conn.commit()
+
                 st.success("Registration successful! You can now log in.")
 
         except Exception as e:
