@@ -6,9 +6,7 @@ import seaborn as sns
 from sqlalchemy import create_engine, text
 import os
 from dotenv import load_dotenv
-import hashlib
-import subprocess
-import base64
+
 
 load_dotenv()
 DB_PASSWORD = os.getenv("DB_PASSWORD")
@@ -27,6 +25,24 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
 
 # Retrieve username from session
 username = st.session_state.get("username")
+
+# TODO: pull this data from database
+# TODO: add photo paths
+drinks_data = {
+    "Coffee": {
+        "coffee_base_01": "Espresso",
+        "coffee_base_02": "Vietnamese Coffee",
+        "coffee_base_03": "Cold Brew"
+    },
+    "Tea": {
+        "coffee_base_01": "Earl Grey Tea", 
+        "coffee_base_02": "Green Tea", 
+        "coffee_base_03": "Peach & Flower Tea"
+    },
+    "Matcha": {
+        "matcha_base_01": "Matcha", 
+        "matcha_base_02": "Hojicha"}
+}
 
 # Create layout
 col1, col2 = st.columns([4, 1])
