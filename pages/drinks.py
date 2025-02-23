@@ -35,9 +35,9 @@ drinks_data = {
         "coffee_base_03": "Cold Brew"
     },
     "Tea": {
-        "coffee_base_01": "Earl Grey Tea", 
-        "coffee_base_02": "Green Tea", 
-        "coffee_base_03": "Peach & Flower Tea"
+        "tea_base_01": "Earl Grey Tea", 
+        "tea_base_02": "Green Tea", 
+        "tea_base_03": "Peach & Flower Tea"
     },
     "Matcha": {
         "matcha_base_01": "Matcha", 
@@ -114,28 +114,28 @@ for category, drinks in drinks_data.items():
             with button_cols[i]:  # Assign each button to a separate column, evenly spaced
                 st.markdown("<div style='display: flex; justify-content: center;'>", unsafe_allow_html=True)
                 if st.button(drink_name, key=f"{category}_{drink_key}"):
-                    st.switch_page(f"base/{drink_key}")  # ✅ Correct page switching
-                st.markdown("</div>", unsafe_allow_html=True)  # Ensures buttons are centered
+                    st.switch_page(f"pages/{drink_key}.py")  # ✅ Correct page switching
+                st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)  # Close full-box
 
 st.markdown("<hr>", unsafe_allow_html=True)
 
-# ✅ Navigation Bar at the Bottom
+# Navigation Bar at the Bottom
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     if st.button("🏠 Home"):
-        st.switch_page("homepage")
+        st.switch_page("pages/homepage.py")
 
 with col2:
     if st.button("🥤 Drinks"):
-        st.switch_page("drinks")
+        st.switch_page("pages/drinks.py")
 
 with col3:
     if st.button("🍩 Foods"):
-        st.switch_page("foods")
+        st.switch_page("pages/foods.py")
 
 with col4:
     if st.button("🛒 Cart"):
-        st.switch_page("cart")
+        st.switch_page("pages/cart.py")
