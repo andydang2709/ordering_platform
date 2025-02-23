@@ -43,5 +43,3 @@ INSERT INTO menu VALUES
 INSERT INTO transactions (user_id, food_id, sales_revenue) VALUES 
     ("andydang", '["base_01", "dairy_01", "syrup_01", "sweetness_00", "ice_50"]', 5.02),
     ("andydang", '["food_01", "sweetness_50", "no_nuts"]', 7.50);
-    
-select * from transactions;

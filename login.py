@@ -1,12 +1,7 @@
 # TODO: Import necessary packages
 # pip install django streamlit numpy pandas matplotlib seaborn scikit-learn sqlalchemy python-dotenv cryptography pymysql
 # source .venv/bin/activate
-# streamlit run customer_facing.py
-
-###### NOTE: this is how you run a query in Python ######
-#   query = "INSERT INTO transactions (date, detail, amount, account, category, belongs_to) VALUES (%s, %s, %s, %s, %s, %s)"
-#    with engine.connect() as conn:
-#        conn.execute(query, (date, detail, amount, account, category, belongs_to))
+# streamlit run login.py
 
 import streamlit as st
 import pandas as pd
@@ -19,9 +14,6 @@ from dotenv import load_dotenv
 import hashlib
 import subprocess
 
-
-## TODO: Define all classes
-
 ## TODO: Accessing the database
 load_dotenv()
 DB_PASSWORD = os.getenv("DB_PASSWORD")
@@ -30,8 +22,7 @@ DB_HOST = os.getenv("DB_HOST", "localhost")
 schema_name = "ordering_app"
 engine = create_engine(f"mysql+pymysql://root:{DB_PASSWORD}@{DB_HOST}/{schema_name}")
 
-## TODO: make login function
-
+## TODO: Make login function
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
@@ -55,21 +46,23 @@ def login():
 
                     if result and result[0] == hashed_password:
                         st.success(f"Welcome, {username}!")
+
+                        # Store user login state
                         st.session_state["logged_in"] = True
                         st.session_state["username"] = username
+
+                        # Redirect to homepage.py
+                        st.switch_page("pages/homepage.py")
                     else:
                         st.error("Invalid username or password.")
         except Exception as e:
             st.error(f"Database error: {e}")    
 
-    # if st.button("Register"):
-    #     subprocess.run(["streamlit", "run", "register.py"])
-
-
 def register():
     st.title("Register New Account")
 
-    new_username = st.text_input("Choose a Username", key="reg_username")
+    new_username = st.text_input("Username", key="reg_username")
+    new_full_name = st.text_input("Name", key="reg_full_name")
     new_password = st.text_input("Choose a Password", type="password", key="reg_password")
     confirm_password = st.text_input("Confirm Password", type="password", key="confirm_password")
 
@@ -102,7 +95,7 @@ def register():
                 conn.execute(insert_query, {
                     "username": new_username,
                     "password": hashed_password,
-                    "user_name": new_username 
+                    "user_name": new_full_name 
                 })
 
                 st.success("Registration successful! You can now log in.")
@@ -110,10 +103,14 @@ def register():
         except Exception as e:
             st.error(f"Database error: {e}")
 
-tab1, tab2 = st.tabs(["Login", "Create a New Account"])
+if "logged_in" in st.session_state and st.session_state["logged_in"]:
+    st.success(f"Welcome back, {st.session_state['username']}!")
+    st.page_link("pages/homepage.py", label="Go to HomePage", icon="🍽️")
+else:
+    tab1, tab2 = st.tabs(["Login", "Create a New Account"])
 
-with tab1:
-    login()
+    with tab1:
+        login()
 
-with tab2:
-    register()
+    with tab2:
+        register()
